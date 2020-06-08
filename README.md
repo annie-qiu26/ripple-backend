@@ -9,7 +9,7 @@ $ pipenv install
 ```  
 Set the `FLASK_APP` and `FLASK_DEBUG` environment variables
 ```
-$ export FLASK_APP=app.py
+$ export FLASK_APP=run.py
 $ export FLASK_DEBUG=1
 ```
 Activate the Pipenv shell:  
