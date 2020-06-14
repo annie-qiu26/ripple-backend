@@ -2,8 +2,6 @@
 from flask import Flask
 from flask_pymongo import PyMongo
 
-from app import link_node
-
 # Define the WSGI application object
 app = Flask(__name__)
 
@@ -16,7 +14,11 @@ mongo = PyMongo(app)
 db = mongo.db
 
 # Import a module / component using its blueprint handler variable
-from app.link_node.controllers import blueprint as link_node_module
+from app.link.controllers import blueprint as link_module
+from app.ripple.controllers import blueprint as ripple_module
+from app.user.controllers import blueprint as user_module
 
 # Register blueprint(s)
-app.register_blueprint(link_node_module)
+app.register_blueprint(link_module)
+app.register_blueprint(ripple_module)
+app.register_blueprint(user_module)
