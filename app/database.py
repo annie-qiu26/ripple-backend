@@ -16,8 +16,14 @@ class Model():
         if self.__class__.collection == None:
             raise Exception("No database collection specified")
         dic = self.dict()
-        del dic['_id']
-        self.__class__.collection.save(dic)
+        objId = dic['_id']
+        if objId == None:
+            del dic['_id']
+            objId = self.__class__.collection.save(dic)
+            return str(objId)
+        else:
+            self.__class__.collection.update_one({'_id': ObjectId(objId)}, {'$set': dic})
+            return objId
 
     @classmethod
     def queryById(cls, id):
@@ -25,8 +31,6 @@ class Model():
             raise Exception("No database collection specified")
         try:
             dic = cls.collection.find_one({'_id': ObjectId(id)})
-            if dic == None:
-                return {}
             dic['_id'] = id
             return dic
         except Exception:
