@@ -2,6 +2,8 @@
 from flask import Flask
 from flask_pymongo import PyMongo
 
+from app.secret import MONGO_URI
+
 # Define the WSGI application object
 app = Flask(__name__)
 
@@ -10,6 +12,7 @@ app.config.from_object('config')
 
 # Define the database object which is imported
 # by modules and controllers
+app.config["MONGO_URI"] = MONGO_URI
 mongo = PyMongo(app)
 db = mongo.db
 
