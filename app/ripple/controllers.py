@@ -32,6 +32,13 @@ def find_ripple(rid):
     ripple = Ripple.queryById(rid)
     return ripple
 
-@blueprint.route('/api/ripple', methods=["PUT"])
+"""
+Request Body Parameters:
+    user_id: str, optional
+    start_location: optional
+        lat: float
+        lon: float
+"""
+@blueprint.route('/api/ripple/<rid>', methods=["POST"])
 def update_ripple():
     pass

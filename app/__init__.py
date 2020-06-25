@@ -20,8 +20,10 @@ db = mongo.db
 from app.link.controllers import blueprint as link_module
 from app.ripple.controllers import blueprint as ripple_module
 from app.user.controllers import blueprint as user_module
+from app.organization.controllers import blueprint as org_module
 
 # Register blueprint(s)
 app.register_blueprint(link_module)
 app.register_blueprint(ripple_module)
 app.register_blueprint(user_module)
+app.register_blueprint(org_module)
