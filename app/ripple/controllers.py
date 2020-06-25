@@ -13,11 +13,12 @@ Request Body Parameters:
     start_location: optional
         lat: float
         lon: float
+    organizations: [org_ids], required
 """
 @blueprint.route('/api/ripple', methods=['POST'])
 @validateNewRipple
-def create_ripple(user_id, start_location):
-    ripple = Ripple()
+def create_ripple(org_ids, user_id, start_location):
+    ripple = Ripple(org_ids)
     ripple_id = ripple.save()
 
     root_link = Link(ripple_id=ripple_id, user_id=user_id, start_location=start_location)
