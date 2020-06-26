@@ -1,19 +1,21 @@
 from flask import request
 
-from app.link.models import Location
 from app.organization.models import Organization
+from app.location.utils import extractLocation
 
 def getArgs():
     json = request.json
     if type(json.get('organizations', None)) != list:
         return None
 
-    location = None
-    if 'start_location' in json:
-        loc = json['start_location']
-        location = Location(loc['lat'], loc['lon'])
+    loc = json.get('start_location', None)
+    location = extractLocation(loc)
 
-    return json['organizations'], json.get('user_id', None), location
+    user_id = None
+    if type(json.get('user_id', None)) == str:
+        user_id = json['user_id']
+
+    return json['organizations'], user_id, location
 
 def checkOrganizations():
     json = request.json

@@ -1,25 +1,25 @@
 from flask import request
 
-from app.link.models import Link, Location
+from app.link.models import Link
 from app.ripple.models import Ripple
+
+from app.location.utils import extractLocation
 
 def getArgs():
     json = request.json
-    if 'parent_id' not in json:
+    if type(json.get('parent_id', None)) != str:
         return None
 
-    location = None
-    if 'start_location' in json:
-        loc = json['start_location']
-        location = Location(loc['lat'], loc['lon'])
+    loc = json.get('start_location', None)
+    location = extractLocation(loc)
 
-    return json['parent_id'], json.get('user_id', None), location
+    user_id = None
+    if type(json.get('user_id', None)) == str:
+        user_id = json['user_id']
 
-def getRippleId():
-    json = request.json
-    if 'parent_id' not in json:
-        return False
-    parent_id = json['parent_id']
+    return json['parent_id'], user_id, location
+
+def getRippleId(parent_id):
     parent = Link.queryById(parent_id)
     return str(parent['ripple_id'])
 
@@ -29,7 +29,7 @@ def validateNewLink(f):
         if args == None:
             return "Invalid Request", 422
 
-        ripple_id = getRippleId()
+        ripple_id = getRippleId(args[0])
         if ripple_id == None:
             return "Invalid Ripple Id", 422
 

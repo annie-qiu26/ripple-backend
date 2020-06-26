@@ -18,9 +18,10 @@ def create_organization(name, url, category):
     org.save()
     return "Success"
 
-@blueprint.route('/api/organization', methods=["GET"])
-def find_organization(token):
-    pass
+@blueprint.route('/api/organization/<org_id>', methods=["GET"])
+def find_organization(org_id):
+    org = Organization.queryById(org_id)
+    return org
 
 @blueprint.route('/api/organization', methods=["PUT"])
 def update_organization():

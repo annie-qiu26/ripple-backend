@@ -2,11 +2,7 @@ from datetime import datetime
 
 from app.database import Model
 from app import db
-
-class Location():
-    def __init__(self, lat, lon):
-        self.lat = lat # float
-        self.lon = lon
+from app.location.models import Location
 
 class Link(Model):
     collection = db.links
