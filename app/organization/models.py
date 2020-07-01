@@ -6,7 +6,7 @@ from app import db
 class Organization(Model):
     collection = db.organizations
 
-    def __init__(self, name, url, category=None):
+    def __init__(self, name=None, url=None, category=None):
         super().__init__()
 
         self._id = None # str, token that uniquely identiifes Node

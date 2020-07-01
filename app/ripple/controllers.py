@@ -33,7 +33,7 @@ def create_ripple(org_ids, user_id, start_location):
 @blueprint.route('/api/ripple/<rid>', methods=["GET"])
 def find_ripple(rid):
     ripple = Ripple.queryById(rid)
-    return ripple
+    return ripple.__dict__
 
 """
 Request Body Parameters:

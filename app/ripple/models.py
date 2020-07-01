@@ -4,7 +4,7 @@ from app import db
 class Ripple(Model):
     collection = db.ripples
 
-    def __init__(self, org_ids):
+    def __init__(self, org_ids=[]):
         self._id = None # str, token that uniquely identiifes Ripple
         self.root_id = None # str, token that points to the root Node
         

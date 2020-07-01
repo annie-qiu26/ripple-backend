@@ -21,7 +21,7 @@ def create_organization(name, url, category):
 @blueprint.route('/api/organization/<org_id>', methods=["GET"])
 def find_organization(org_id):
     org = Organization.queryById(org_id)
-    return org
+    return org.__dict__
 
 @blueprint.route('/api/organization', methods=["PUT"])
 def update_organization():

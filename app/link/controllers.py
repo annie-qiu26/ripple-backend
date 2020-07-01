@@ -35,7 +35,7 @@ token: str
 @blueprint.route('/api/link/<link_id>', methods=['GET'])
 def find_link(link_id):
     link = Link.queryById(link_id)
-    return link
+    return link.__dict__
 
 """
 Request Body Parameters:

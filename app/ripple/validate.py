@@ -21,7 +21,7 @@ def checkOrganizations():
     json = request.json
     for org_id in json['organizations']:
         org = Organization.queryById(org_id)
-        if not org:
+        if org == None:
             return False
     return True
 
