@@ -4,7 +4,7 @@ from app.link.models import Link
 from app import db
 
 from app.link.validate import validateNewLink
-from app.link.descendents import increment_descendent_counts, increment_child_counts
+from app.link.updates import increment_descendent_counts, increment_child_counts, update_depth
 
 blueprint = Blueprint('link', __name__)
 
@@ -24,6 +24,7 @@ def create_link(ripple_id, parent_id, user_id, start_location):
     link = Link(ripple_id=ripple_id, parent_id=parent_id, user_id=user_id, start_location=start_location)
     increment_descendent_counts(parent_id)
     increment_child_counts(parent_id)
+    update_depth(parent_id)
     link_id = link.save()
     return {"ripple_id": str(ripple_id), "link_id": str(link_id)}
 
