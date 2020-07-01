@@ -17,8 +17,8 @@ class Model():
             raise Exception("No database collection specified")
         dic = self.dict()
         objId = dic['_id']
+        del dic['_id']
         if objId == None:
-            del dic['_id']
             objId = self.__class__.collection.save(dic)
             return str(objId)
         else:
@@ -32,6 +32,10 @@ class Model():
         try:
             dic = cls.collection.find_one({'_id': ObjectId(id)})
             dic['_id'] = id
-            return dic
+
+            obj = cls()
+            for k, v in dic.items():
+                setattr(obj, k, v)
+            return obj
         except Exception:
-            return {}
+            return None

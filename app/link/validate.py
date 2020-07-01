@@ -21,7 +21,9 @@ def getArgs():
 
 def getRippleId(parent_id):
     parent = Link.queryById(parent_id)
-    return str(parent['ripple_id'])
+    if parent == None or parent.ripple_id == None:
+        return None
+    return str(parent.ripple_id)
 
 def validateNewLink(f):
     def func(*args, **kwargs):

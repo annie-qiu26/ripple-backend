@@ -14,6 +14,8 @@ Request Body Parameters:
         lat: float
         lon: float
     organizations: [org_ids], required
+Example curl request:
+curl -X POST --data '{"organizations": []}' --header "Content-Type: application/json" localhost:5000/api/ripple
 """
 @blueprint.route('/api/ripple', methods=['POST'])
 @validateNewRipple
