@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, abort
 
 from app.organization.models import Organization
 from app.organization.validate import validateNewOrganization
@@ -21,6 +21,8 @@ def create_organization(name, url, category):
 @blueprint.route('/api/organization/<org_id>', methods=["GET"])
 def find_organization(org_id):
     org = Organization.queryById(org_id)
+    if org == None:
+        abort(404);
     return org.__dict__
 
 # list all organizations

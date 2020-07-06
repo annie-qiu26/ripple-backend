@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, abort
 
 from app.link.models import Link
 from app import db
@@ -35,6 +35,8 @@ token: str
 @blueprint.route('/api/link/<link_id>', methods=['GET'])
 def find_link(link_id):
     link = Link.queryById(link_id)
+    if link == None:
+        abort(404);
     return link.__dict__
 
 """
@@ -50,4 +52,4 @@ added_location: str
 """
 @blueprint.route('/api/link', methods=["PUT"])
 def update_link():
-    pass
+    return ""
