@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, abort
 
 from app.ripple.models import Ripple
 from app.link.models import Link
@@ -34,6 +34,8 @@ def create_ripple(title, org_ids, user_id, start_location):
 @blueprint.route('/api/ripple/<rid>', methods=["GET"])
 def find_ripple(rid):
     ripple = Ripple.queryById(rid)
+    if ripple == None:
+        abort(404)
     return ripple.__dict__
 
 """
@@ -42,4 +44,4 @@ def find_ripple(rid):
 def list_ripples():
     allRipples = Ripple.queryAll()
     res = [{'_id': ripple._id, 'title': ripple.title} for ripple in allRipples]
-    return {'res': res}
+    return {'ripples': res}

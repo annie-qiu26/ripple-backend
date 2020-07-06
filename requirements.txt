@@ -1,3 +1,4 @@
 flask
 dnspython
 flask_pymongo
+flask-cors

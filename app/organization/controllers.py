@@ -28,4 +28,4 @@ def find_organization(org_id):
 def list_organizations():
     allOrgs = Organization.queryAll()
     res = [{'_id': org._id, 'name': org.name} for org in allOrgs]
-    return {'res': res}
+    return {'organizations': res}

@@ -1,11 +1,16 @@
 """Main application package."""
 from flask import Flask
+from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo
 
 from app.secret import MONGO_URI
 
 # Define the WSGI application object
 app = Flask(__name__)
+
+# enable CORS
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Configurations
 app.config.from_object('config')
