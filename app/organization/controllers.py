@@ -26,8 +26,6 @@ def find_organization(org_id):
 # list all organizations
 @blueprint.route('/api/organization/list', methods=["GET"])
 def list_organizations():
-    allOrgs = Organization.collection.find({})
-    res = []
-    for org in allOrgs:
-        res.append({'_id': str(org['_id']), 'name': org['name']})
+    allOrgs = Organization.queryAll()
+    res = [{'_id': org._id, 'name': org.name} for org in allOrgs]
     return {'res': res}

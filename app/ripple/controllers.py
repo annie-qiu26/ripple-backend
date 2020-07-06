@@ -9,6 +9,7 @@ blueprint = Blueprint('ripple', __name__)
 
 """
 Request Body Parameters:
+    title: str, required
     user_id: str, optional
     start_location: optional
         lat: float
@@ -19,8 +20,8 @@ curl -X POST --data '{"organizations": []}' --header "Content-Type: application/
 """
 @blueprint.route('/api/ripple', methods=['POST'])
 @validateNewRipple
-def create_ripple(org_ids, user_id, start_location):
-    ripple = Ripple(org_ids)
+def create_ripple(title, org_ids, user_id, start_location):
+    ripple = Ripple(title, org_ids)
     ripple_id = ripple.save()
 
     root_link = Link(ripple_id=ripple_id, user_id=user_id, start_location=start_location)
@@ -36,12 +37,9 @@ def find_ripple(rid):
     return ripple.__dict__
 
 """
-Request Body Parameters:
-    user_id: str, optional
-    start_location: optional
-        lat: float
-        lon: float
 """
-@blueprint.route('/api/ripple/<rid>', methods=["POST"])
-def update_ripple():
-    pass
+@blueprint.route('/api/ripple/list', methods=["GET"])
+def list_ripples():
+    allRipples = Ripple.queryAll()
+    res = [{'_id': ripple._id, 'title': ripple.title} for ripple in allRipples]
+    return {'res': res}

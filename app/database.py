@@ -39,3 +39,21 @@ class Model():
             return obj
         except Exception:
             return None
+
+    @classmethod
+    def queryAll(cls):
+        if cls.collection == None:
+            raise Exception("No database collection specified")
+        try:
+            documents = cls.collection.find({})
+            res = []
+            for doc in documents:
+                doc['_id'] = str(doc['_id'])
+
+                obj = cls()
+                for k, v in doc.items():
+                    setattr(obj, k, v)
+                res.append(obj)
+            return res
+        except Exception:
+            return None

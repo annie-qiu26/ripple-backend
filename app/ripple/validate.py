@@ -5,6 +5,8 @@ from app.location.utils import extractLocation
 
 def getArgs():
     json = request.json
+    if type(json.get('title', None)) != str:
+        return None
     if type(json.get('organizations', None)) != list:
         return None
 
@@ -15,7 +17,7 @@ def getArgs():
     if type(json.get('user_id', None)) == str:
         user_id = json['user_id']
 
-    return json['organizations'], user_id, location
+    return json['title'], json['organizations'], user_id, location
 
 def checkOrganizations():
     json = request.json
