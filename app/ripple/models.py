@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from app.database import Model
 from app import db
 
@@ -8,7 +10,7 @@ class Ripple(Model):
         self._id = None # str, token that uniquely identiifes Ripple
         self.root_id = None # str, token that points to the root Node
         
-        self.created_at = None # DateTime
+        self.created_at = datetime.now() # DateTime
 
         self.title = title
         self.organizations = org_ids # [str or organization ids]
