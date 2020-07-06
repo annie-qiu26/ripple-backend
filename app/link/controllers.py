@@ -1,6 +1,7 @@
 from flask import Blueprint, request, abort
 
 from app.link.models import Link
+from app.ripple.models import Ripple
 from app import db
 
 from app.link.validate import validateNewLink
@@ -37,7 +38,12 @@ def find_link(link_id):
     link = Link.queryById(link_id)
     if link == None:
         abort(404);
-    return link.__dict__
+
+    ripple = Ripple.queryById(link.ripple_id)
+    if ripple == None:
+        abort(404)
+
+    return {"link": link.__dict__, "ripple": ripple.__dict__}
 
 """
 Request Body Parameters:
