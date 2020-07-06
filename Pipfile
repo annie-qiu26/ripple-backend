@@ -8,6 +8,8 @@ verify_ssl = true
 [packages]
 flask = "*"
 flask-pymongo = "*"
+dnspython = "*"
+requests = "*"
 
 [requires]
 python_version = "3.6"
