@@ -23,6 +23,11 @@ def find_organization(org_id):
     org = Organization.queryById(org_id)
     return org.__dict__
 
-@blueprint.route('/api/organization', methods=["PUT"])
-def update_organization():
-    pass
+# list all organizations
+@blueprint.route('/api/organization/list', methods=["GET"])
+def list_organizations():
+    allOrgs = Organization.collection.find({})
+    res = []
+    for org in allOrgs:
+        res.append({'_id': str(org['_id']), 'name': org['name']})
+    return {'res': res}
