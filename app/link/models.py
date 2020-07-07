@@ -37,7 +37,8 @@ class Link(Model):
         self.save()
 
     def dict(self):
-        dic = self.__dict__
+        dic = {}
+        dic.update(self.__dict__)
         if self.start_location != None:
             dic['start_location'] = self.start_location.__dict__
         if self.farthest_location != None:

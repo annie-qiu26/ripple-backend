@@ -15,6 +15,7 @@ class Organization(Model):
         self.category = category # Optional
 
     def dict(self):
-        dic = self.__dict__
+        dic = {}
+        dic.update(self.__dict__)
         return dic
 
