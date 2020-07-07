@@ -1,4 +1,4 @@
-from flask import Blueprint, request, abort
+from flask import Blueprint, request, make_response, abort
 
 from app.link.models import Link
 from app.ripple.models import Ripple
@@ -29,11 +29,7 @@ def create_link(ripple_id, parent_id, user_id, start_location):
     link_id = link.save()
     return {"ripple_id": str(ripple_id), "link_id": str(link_id)}
 
-"""
-Request Query Parameters:
-token: str
-"""
-@blueprint.route('/api/link/<link_id>', methods=['GET'])
+@blueprint.route('/api/link/<link_id>', methods=['POST'])
 def find_link(link_id):
     link = Link.queryById(link_id)
     if link == None:
@@ -43,8 +39,16 @@ def find_link(link_id):
     if ripple == None:
         abort(404)
 
-    return {"link": link.__dict__, "ripple": ripple.__dict__}
+    resp = make_response({"link": link.__dict__, "ripple": ripple.__dict__})
+    resp.headers['Access-Control-Allow-Credentials'] = 'true'
 
+    if request.cookies.get(link_id) == None:
+        # increment views
+        link.view()
+        # set cookie
+        resp.set_cookie(link_id, "1")
+
+    return resp
 """
 Request Body Parameters:
 total_views: int

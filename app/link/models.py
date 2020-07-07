@@ -31,6 +31,11 @@ class Link(Model):
         self.farthest_location = None # str
         self.last_location = start_location # str
 
+    def view(self):
+        self.total_views += 1
+        self.total_unique_visitors += 1
+        self.save()
+
     def dict(self):
         dic = self.__dict__
         if self.start_location != None:

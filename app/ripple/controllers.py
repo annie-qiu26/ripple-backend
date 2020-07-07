@@ -43,5 +43,5 @@ def find_ripple(rid):
 @blueprint.route('/api/ripple/list', methods=["GET"])
 def list_ripples():
     allRipples = Ripple.queryAll()
-    res = [{'_id': ripple._id, 'title': ripple.title} for ripple in allRipples]
+    res = [{'_id': ripple._id, 'root_id': ripple.root_id, 'title': ripple.title} for ripple in allRipples]
     return {'ripples': res}
