@@ -39,12 +39,14 @@ def find_link(link_id):
     if ripple == None:
         abort(404)
 
-    if request.cookies.get(link_id) == None:
+    viewNo = request.cookies.get(link_id)
+    if viewNo == None:
         link.view()
+        viewNo = link.total_views
 
-    resp = make_response({"link": link.__dict__, "ripple": ripple.__dict__})
+    resp = make_response({"link": link.__dict__, "ripple": ripple.__dict__, "view_no": str(viewNo)})
     resp.headers['Access-Control-Allow-Credentials'] = 'true'
-    resp.set_cookie(link_id, "1")
+    resp.set_cookie(link_id, str(viewNo))
 
     return resp
 """
