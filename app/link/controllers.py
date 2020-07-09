@@ -2,6 +2,7 @@ from flask import Blueprint, request, make_response, abort
 
 from app.link.models import Link
 from app.ripple.models import Ripple
+from app.user.controllers import user_from_cookie
 from app import db
 
 from app.link.validate import validateNewLink
@@ -9,60 +10,57 @@ from app.link.updates import increment_descendent_counts, increment_child_counts
 
 blueprint = Blueprint('link', __name__)
 
-"""
-Request Body Parameters:
-    parent_id: str, required
-    user_id: str, optional
-    start_location: 
-        lat: float
-        lon: float
-Example curl request:
-curl -X POST --data '{"parent_id":"___"}' --header "Content-Type: application/json" localhost:5000/api/link
-"""
-@blueprint.route('/api/link', methods=['POST'])
-@validateNewLink
 def create_link(ripple_id, parent_id, user_id, start_location):
     link = Link(ripple_id=ripple_id, parent_id=parent_id, user_id=user_id, start_location=start_location)
     increment_descendent_counts(parent_id)
     increment_child_counts(parent_id)
     update_depth(parent_id)
     link_id = link.save()
-    return {"ripple_id": str(ripple_id), "link_id": str(link_id)}
+    return link_id
 
-@blueprint.route('/api/link/<link_id>', methods=['POST'])
-def find_link(link_id):
+def find_ripple_link(link_id):
     link = Link.queryById(link_id)
     if link == None:
-        abort(404);
+        return None, None
 
     ripple = Ripple.queryById(link.ripple_id)
     if ripple == None:
+        return None, None
+
+    return link, ripple
+
+@blueprint.route('/api/link/<link_id>', methods=['GET'])
+def find_route(link_id):
+    link, ripple = find_ripple_link(link_id)
+    if link == None or ripple == None:
+        abort(404)
+    return {"link": link.dict(), "ripple": ripple.dict()}
+
+@blueprint.route('/api/link/<link_id>', methods=['POST'])
+def visit_route(link_id):
+    # get old link and ripple info
+    link, ripple = find_ripple_link(link_id)
+    if link == None or ripple == None:
         abort(404)
 
-    link.total_views += 1
-    
-    viewNo = request.cookies.get(link_id)
-    if viewNo == None:
-        link.total_unique_visitors += 1
-        viewNo = link.total_views
-    link.save()
+    # get the user's link_id associated with thie ripple
+    user = user_from_cookie(request)
+    user_link_id = user.get_link(link.ripple_id)
+    print(user.dict())
 
-    resp = make_response({"link": link.__dict__, "ripple": ripple.__dict__, "view_no": str(viewNo)})
+    # if user does not have link with this ripple, make one
+    if user_link_id == None:
+        user_link_id = create_link(link.ripple_id, link_id, None, None)
+        child_index = link.total_children + 1 # the total children + 1 == how many links were created before this
+        user.set_ripple_link(link.ripple_id, user_link_id, child_index)
+    uid = user.save()
+
+    # get the link the user has associated with ripple
+    link = Link.queryById(user_link_id)
+    viewNo = user.get_link_index(user_link_id)
+    resp = make_response({"link": link.dict(), "ripple": ripple.dict(), "view_no": str(viewNo)})
+
     resp.headers['Access-Control-Allow-Credentials'] = 'true'
-    resp.set_cookie(link_id, str(viewNo))
+    resp.set_cookie("uid", uid)
 
     return resp
-"""
-Request Body Parameters:
-total_views: int
-total_unique_visitors: int
-total_children: int 
-total_descendants: int
-total_depth: int 
-total_raised: int 
-total_miles: int
-added_location: str
-"""
-@blueprint.route('/api/link', methods=["PUT"])
-def update_link():
-    return ""

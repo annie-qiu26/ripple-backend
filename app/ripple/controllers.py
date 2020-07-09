@@ -1,11 +1,18 @@
-from flask import Blueprint, request, abort
+from flask import Blueprint, request, make_response, abort
 
 from app.ripple.models import Ripple
 from app.link.models import Link
 from app.ripple.validate import validateNewRipple
+from app.user.controllers import user_from_cookie
 
 
 blueprint = Blueprint('ripple', __name__)
+
+@blueprint.route('/api/ripple', methods=['OPTIONS'])
+def options_route():
+    resp = make_response({})
+    resp.headers['Access-Control-Allow-Credentials'] = 'true'
+    return resp
 
 """
 Request Body Parameters:
@@ -29,7 +36,17 @@ def create_ripple(title, org_ids, user_id, start_location):
 
     ripple.root_id = link_id
     ripple.save()
-    return {"ripple_id": str(ripple_id), "link_id": str(link_id)}
+
+    user = user_from_cookie(request)
+    user.set_ripple_link(ripple_id, link_id, 1)
+    uid = user.save()
+
+    resp = make_response({"ripple_id": ripple_id, "link_id": link_id})
+
+    resp.headers['Access-Control-Allow-Credentials'] = 'true'
+    resp.set_cookie("uid", uid)
+
+    return resp
 
 @blueprint.route('/api/ripple/<rid>', methods=["GET"])
 def find_ripple(rid):
