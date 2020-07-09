@@ -10,7 +10,9 @@ class Model():
         pass
 
     def dict(self):
-        return {}
+        dic = {}
+        dic.update(self.__dict__)
+        return dic
 
     def save(self):
         if self.__class__.collection == None:
@@ -19,11 +21,12 @@ class Model():
         objId = dic['_id']
         del dic['_id']
         if objId == None:
-            objId = self.__class__.collection.save(dic)
-            return str(objId)
+            objId = str(self.__class__.collection.save(dic))
         else:
             self.__class__.collection.update_one({'_id': ObjectId(objId)}, {'$set': dic})
-            return objId
+
+        self._id = objId
+        return objId
 
     @classmethod
     def queryById(cls, id):
