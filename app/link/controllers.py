@@ -46,7 +46,6 @@ def visit_route(link_id):
     # get the user's link_id associated with thie ripple
     user = user_from_cookie(request)
     user_link_id = user.get_link(link.ripple_id)
-    print(user.dict())
 
     # if user does not have link with this ripple, make one
     if user_link_id == None:
