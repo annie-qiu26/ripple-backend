@@ -14,8 +14,3 @@ class Ripple(Model):
 
         self.title = title
         self.organizations = org_ids # [str or organization ids]
-
-    def dict(self):
-        dic = {}
-        dic.update(self.__dict__)
-        return dic
