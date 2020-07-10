@@ -45,9 +45,11 @@ def find_route(link_id):
 @blueprint.route('/api/link/<link_id>', methods=['POST'])
 def visit_route(link_id):
     # get old link and ripple info
-    _, ripple = find_ripple_link(link_id)
-    if ripple == None:
+    link, ripple = find_ripple_link(link_id)
+    if link == None or ripple == None:
         abort(404)
+    link.total_views += 1
+    link.save()
 
     # get the user's link_id associated with thie ripple
     user = user_from_cookie(request)

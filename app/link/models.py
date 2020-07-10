@@ -18,9 +18,7 @@ class Link(Model):
         self.created_at = datetime.now() # DateTime
 
         self.total_views = 0 # int
-        self.total_unique_visitors = 0 # int
-        # ^ though how do we keep track of people visiting?
-        # (Google Analytics does this somehow?)
+
         self.total_children = 0 # int 
         self.total_descendants = 0 # int
         self.total_depth = 0 # int
