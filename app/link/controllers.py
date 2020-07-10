@@ -29,6 +29,12 @@ def find_ripple_link(link_id):
 
     return link, ripple
 
+@blueprint.route('/api/ripple', methods=['OPTIONS'])
+def options_route():
+    resp = make_response({})
+    resp.headers['Access-Control-Allow-Credentials'] = 'true'
+    return resp
+
 @blueprint.route('/api/link/<link_id>', methods=['GET'])
 def find_route(link_id):
     link, ripple = find_ripple_link(link_id)
@@ -39,19 +45,19 @@ def find_route(link_id):
 @blueprint.route('/api/link/<link_id>', methods=['POST'])
 def visit_route(link_id):
     # get old link and ripple info
-    link, ripple = find_ripple_link(link_id)
-    if link == None or ripple == None:
+    _, ripple = find_ripple_link(link_id)
+    if ripple == None:
         abort(404)
 
     # get the user's link_id associated with thie ripple
     user = user_from_cookie(request)
-    user_link_id = user.get_link(link.ripple_id)
+    user_link_id = user.get_link(ripple._id)
 
     # if user does not have link with this ripple, make one
     if user_link_id == None:
-        user_link_id = create_link(link.ripple_id, link_id, None, None)
+        user_link_id = create_link(ripple._id, link_id, None, None)
         child_index = link.total_children + 1 # the total children + 1 == how many links were created before this
-        user.set_ripple_link(link.ripple_id, user_link_id, child_index)
+        user.set_ripple_link(ripple._id, user_link_id, child_index)
     uid = user.save()
 
     # get the link the user has associated with ripple
