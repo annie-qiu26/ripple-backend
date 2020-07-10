@@ -29,7 +29,7 @@ def find_ripple_link(link_id):
 
     return link, ripple
 
-@blueprint.route('/api/ripple', methods=['OPTIONS'])
+@blueprint.route('/api/link', methods=['OPTIONS'])
 def options_route():
     resp = make_response({})
     resp.headers['Access-Control-Allow-Credentials'] = 'true'
