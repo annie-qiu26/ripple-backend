@@ -7,7 +7,7 @@ from app.location.models import Location
 class Link(Model):
     collection = db.links
 
-    def __init__(self, parent_id=None, ripple_id=None, user_id=None, start_location=None):
+    def __init__(self, parent_id=None, ripple_id=None, user_id=None, start_location=None, child_index=1):
         super().__init__()
 
         self._id = None # str, token that uniquely identiifes Node
@@ -19,6 +19,7 @@ class Link(Model):
 
         self.total_views = 0 # int
 
+        self.child_index = child_index # int
         self.total_children = 0 # int 
         self.total_descendants = 0 # int
         self.total_depth = 0 # int

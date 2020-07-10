@@ -38,7 +38,7 @@ def create_ripple(title, org_ids, user_id, start_location):
     ripple.save()
 
     user = user_from_cookie(request)
-    user.set_ripple_link(ripple_id, link_id, 1)
+    user.set_ripple_link(ripple_id, link_id)
     uid = user.save()
 
     resp = make_response({"ripple_id": ripple_id, "link_id": link_id})

@@ -10,8 +10,8 @@ from app.link.updates import increment_descendent_counts, increment_child_counts
 
 blueprint = Blueprint('link', __name__)
 
-def create_link(ripple_id, parent_id, user_id, start_location):
-    link = Link(ripple_id=ripple_id, parent_id=parent_id, user_id=user_id, start_location=start_location)
+def create_link(ripple_id, parent_id, user_id, start_location, child_index):
+    link = Link(ripple_id=ripple_id, parent_id=parent_id, user_id=user_id, start_location=start_location, child_index=child_index)
     increment_descendent_counts(parent_id)
     increment_child_counts(parent_id)
     update_depth(parent_id)
@@ -57,15 +57,14 @@ def visit_route(link_id):
 
     # if user does not have link with this ripple, make one
     if user_link_id == None:
-        user_link_id = create_link(ripple._id, link_id, None, None)
         child_index = link.total_children + 1 # the total children + 1 == how many links were created before this
-        user.set_ripple_link(ripple._id, user_link_id, child_index)
+        user_link_id = create_link(ripple._id, link_id, None, None, child_index)
+        user.set_ripple_link(ripple._id, user_link_id)
     uid = user.save()
 
     # get the link the user has associated with ripple
     link = Link.queryById(user_link_id)
-    viewNo = user.get_link_index(user_link_id)
-    resp = make_response({"link": link.dict(), "ripple": ripple.dict(), "view_no": str(viewNo)})
+    resp = make_response({"link": link.dict(), "ripple": ripple.dict()})
 
     resp.headers['Access-Control-Allow-Credentials'] = 'true'
     resp.set_cookie("uid", uid)
