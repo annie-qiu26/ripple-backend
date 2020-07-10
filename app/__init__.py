@@ -9,7 +9,7 @@ from app.secret import MONGO_URI
 app = Flask(__name__)
 
 # enable CORS
-cors = CORS(app)
+cors = CORS(app, supports_credentials=True)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # Configurations

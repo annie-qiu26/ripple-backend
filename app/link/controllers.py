@@ -29,12 +29,6 @@ def find_ripple_link(link_id):
 
     return link, ripple
 
-@blueprint.route('/api/link', methods=['OPTIONS'])
-def options_route():
-    resp = make_response({})
-    resp.headers['Access-Control-Allow-Credentials'] = 'true'
-    return resp
-
 @blueprint.route('/api/link/<link_id>', methods=['GET'])
 def find_route(link_id):
     link, ripple = find_ripple_link(link_id)
@@ -66,7 +60,6 @@ def visit_route(link_id):
     link = Link.queryById(user_link_id)
     resp = make_response({"link": link.dict(), "ripple": ripple.dict()})
 
-    resp.headers['Access-Control-Allow-Credentials'] = 'true'
     resp.set_cookie("uid", uid)
 
     return resp

@@ -8,12 +8,6 @@ from app.user.controllers import user_from_cookie
 
 blueprint = Blueprint('ripple', __name__)
 
-@blueprint.route('/api/ripple', methods=['OPTIONS'])
-def options_route():
-    resp = make_response({})
-    resp.headers['Access-Control-Allow-Credentials'] = 'true'
-    return resp
-
 """
 Request Body Parameters:
     title: str, required
@@ -43,7 +37,6 @@ def create_ripple(title, org_ids, user_id, start_location):
 
     resp = make_response({"ripple_id": ripple_id, "link_id": link_id})
 
-    resp.headers['Access-Control-Allow-Credentials'] = 'true'
     resp.set_cookie("uid", uid)
 
     return resp
