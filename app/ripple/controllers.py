@@ -70,4 +70,4 @@ def search_route():
 
     ripples = Ripple.fuzzySearch('title', query)
     print(query)
-    return { "results": ripples }
+    return {"ripples": ripples}
