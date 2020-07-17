@@ -15,6 +15,7 @@ class Ripple(Model):
         self.title = title
         self.organizations = org_ids # [str or organization ids]
         
+        self.total_views = 0 #int
         self.total_links = 1 # int 
         self.total_depth = 1 # int
         self.total_raised = 0 # int

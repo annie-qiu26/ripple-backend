@@ -64,6 +64,8 @@ class Model():
 
     @classmethod
     def fuzzySearch(cls, attribute, query):
+        if cls.collection == None:
+            raise Exception("No database collection specified")
         try:
             escaped = re.sub(r'[-[\]{}()*+?.,\\^$|#\s]', "\\$&", query)
             regex = re.compile(escaped, flags=re.I)
@@ -76,4 +78,36 @@ class Model():
 
             return results
         except Exception:
+            return None
+
+    @classmethod
+    def incrementField(cls, id, field):
+        if cls.collection == None:
+            raise Exception("No database collection specified")
+        try:
+            dic = cls.collection.find_and_modify({'_id': ObjectId(id)}, {"$inc": { field: 1 }})
+            dic['_id'] = id
+
+            obj = cls()
+            for k, v in dic.items():
+                setattr(obj, k, v)
+            return obj
+        except Exception as e:
+            print(e)
+            return None
+
+    @classmethod
+    def setField(cls, id, field, value):
+        if cls.collection == None:
+            raise Exception("No database collection specified")
+        try:
+            dic = cls.collection.find_and_modify({'_id': ObjectId(id)}, {"$set": { field: value }})
+            dic['_id'] = id
+
+            obj = cls()
+            for k, v in dic.items():
+                setattr(obj, k, v)
+            return obj
+        except Exception as e:
+            print(e)
             return None

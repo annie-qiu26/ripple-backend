@@ -53,6 +53,10 @@ def visit_route(link_id):
         child_index = link.total_children + 1 # the total children + 1 == how many links were created before this
         user_link_id = create_link(ripple._id, link_id, None, None, child_index)
         user.set_ripple_link(ripple._id, user_link_id)
+    else:
+        # user already has a link, so user won't be redirected to create a new one
+        # and this increment wont be called twice, one for first load, and one for new load after auto creation
+        Ripple.incrementField(link.ripple_id, "total_views")
     uid = user.save()
 
     # get the link the user has associated with ripple
