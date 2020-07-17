@@ -22,7 +22,7 @@ curl -X POST --data '{"organizations": []}' --header "Content-Type: application/
 @blueprint.route('/api/ripple', methods=['POST'])
 @validateNewRipple
 def create_ripple(title, org_ids, user_id, start_location):
-    ripple = Ripple(title, org_ids)
+    ripple = Ripple(title=title, org_ids=org_ids, start_location=start_location)
     ripple_id = ripple.save()
 
     root_link = Link(ripple_id=ripple_id, user_id=user_id, start_location=start_location)

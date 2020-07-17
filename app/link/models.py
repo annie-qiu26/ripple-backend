@@ -4,6 +4,8 @@ from app.database import Model
 from app import db
 from app.location.models import Location
 
+from bson.objectid import ObjectId
+
 class Link(Model):
     collection = db.links
 
@@ -41,3 +43,30 @@ class Link(Model):
             dic['last_location'] = self.last_location.__dict__
         return dic
 
+    @staticmethod
+    def incrementField(id, field):
+        try:
+            dic = Link.collection.find_and_modify({'_id': ObjectId(id)}, {"$inc": { field: 1 }})
+            dic['_id'] = id
+
+            obj = Link()
+            for k, v in dic.items():
+                setattr(obj, k, v)
+            return obj
+        except Exception as e:
+            print(e)
+            return None
+
+    @staticmethod
+    def setField(id, field, value):
+        try:
+            dic = Link.collection.find_and_modify({'_id': ObjectId(id)}, {"$set": { field: value }})
+            dic['_id'] = id
+
+            obj = Link()
+            for k, v in dic.items():
+                setattr(obj, k, v)
+            return obj
+        except Exception as e:
+            print(e)
+            return None

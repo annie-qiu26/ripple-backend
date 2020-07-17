@@ -42,8 +42,7 @@ def visit_route(link_id):
     link, ripple = find_ripple_link(link_id)
     if link == None or ripple == None:
         abort(404)
-    link.total_views += 1
-    link.save()
+    Link.incrementField(link_id, "total_views")
 
     # get the user's link_id associated with thie ripple
     user = user_from_cookie(request)
