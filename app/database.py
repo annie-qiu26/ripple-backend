@@ -1,5 +1,6 @@
 # Import the database object from the main app module
 from app import db
+import re
 from bson.objectid import ObjectId
 
 class Model():
@@ -58,5 +59,21 @@ class Model():
                     setattr(obj, k, v)
                 res.append(obj)
             return res
+        except Exception:
+            return None
+
+    @classmethod
+    def fuzzySearch(cls, attribute, query):
+        try:
+            escaped = re.sub(r'[-[\]{}()*+?.,\\^$|#\s]', "\\$&", query)
+            regex = re.compile(escaped, flags=re.I)
+
+            documents = cls.collection.find({ attribute: regex })
+            results = []
+            for i, doc in enumerate(documents):
+                doc['_id'] = str(doc['_id'])
+                results.append(doc)
+
+            return results
         except Exception:
             return None

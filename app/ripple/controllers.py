@@ -55,3 +55,19 @@ def list_ripples():
     allRipples = Ripple.queryAll()
     res = [{'_id': ripple._id, 'root_id': ripple.root_id, 'title': ripple.title} for ripple in allRipples]
     return {'ripples': res}
+
+
+"""
+Request Body Parameters:
+    query: str, required
+"""
+@blueprint.route('/api/ripple/search', methods=['POST'])
+def search_route():
+    json = request.json
+    query = json.get('query', None)
+    if type(query) != str:
+        abort(422)
+
+    ripples = Ripple.fuzzySearch('title', query)
+    print(query)
+    return { "results": ripples }

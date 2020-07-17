@@ -18,20 +18,6 @@ def create_organization(name, url, category):
     org.save()
     return "Success"
 
-"""
-Request Body Parameters:
-    query: str, required
-"""
-@blueprint.route('/api/organization/search', methods=['POST'])
-def search_route():
-    json = request.json
-    query = json.get('query', None)
-    if type(query) != str:
-        abort(422)
-
-    orgs = Organization.fuzzySearch(query)
-    return { "results": orgs }
-
 @blueprint.route('/api/organization/<org_id>', methods=["GET"])
 def find_organization(org_id):
     org = Organization.queryById(org_id)
