@@ -6,7 +6,19 @@ from flask_pymongo import PyMongo
 from app.secret import MONGO_URI
 
 # Define the WSGI application object
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../build', static_url_path='/')
+
+# Serve static build files
+@app.route('/home')
+@app.route('/explore')
+@app.route('/about')
+@app.route('/')
+def index():
+  return app.send_static_file('index.html')
+
+@app.route('/ripplits/<rid>')
+def ripplits(rid):
+  return app.send_static_file('index.html')
 
 # enable CORS
 cors = CORS(app, supports_credentials=True)
