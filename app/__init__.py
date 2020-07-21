@@ -9,6 +9,7 @@ from app.secret import MONGO_URI
 app = Flask(__name__, static_folder='../build', static_url_path='/')
 
 # Serve static build files
+@app.route('/404')
 @app.route('/home')
 @app.route('/explore')
 @app.route('/about')

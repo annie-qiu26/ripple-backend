@@ -11,6 +11,3 @@ flask-cors = "*"
 flask-pymongo = "*"
 dnspython = "*"
 requests = "*"
-
-[requires]
-python_version = "3.6"
