@@ -7,12 +7,16 @@ Install from Pipfile:
 ```
 $ pipenv install
 ```  
+If you don't have the right version of python for pipenv, you can also run:
+```
+pip install -r requirements.txt
+```
 Set the `FLASK_APP` and `FLASK_DEBUG` environment variables
 ```
 $ export FLASK_APP=run.py
 $ export FLASK_DEBUG=1
 ```
-Activate the Pipenv shell:  
+Activate the Pipenv shell (optional):  
 ```
 $ pipenv shell
 ``` 
