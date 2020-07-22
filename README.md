@@ -1,3 +1,9 @@
+## Configurations
+Create a file `secret.py` in the app directory. Create an Atlas cluster in [MongoDB](https://www.mongodb.com/cloud/atlas). In `secret.py`, provide the Connect URL to your Mongo cluster.
+```
+MONGO_URI = "mongodb+srv://{your url}"
+```
+
 ## Project Setup
 Clone repository:  
 ```
